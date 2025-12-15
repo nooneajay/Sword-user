@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sword Intro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- AMBIENT MUSIC -->
+  <audio id="ambient" loop preload="auto">
+    <source src="sounds/ambient.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- SWORD SOUNDS -->
+  <audio id="slash" src="sounds/sword-slash.mp3"></audio>
+
+  <!-- PAGE 1 -->
+  <section class="page active" id="page1">
+    <h1 class="red-glow red-pulse red-flicker">PUT YOUR FINGER HERE</h1>
+    <div id="holdCircle"></div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section class="page" id="page2">
+    <h2 class="red-glow red-pulse">Tracking your heart rate</h2>
+    <h2 class="red-glow red-pulse">Reading your mind</h2>
+    <h2 class="red-glow red-pulse">Measuring your thoughts</h2>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section class="page" id="page3">
+    <h1 class="red-glow red-pulse">Ajay</h1>
+    <p class="red-glow">Creative Developer • Cinematic Web</p>
+    <div class="links">
+      <a href="#" class="red-glow">Instagram</a>
+      <a href="#" class="red-glow">YouTube</a>
+      <a href="#" class="red-glow">GitHub</a>
+    </div>
+    <footer class="red-glow">Made by Ajay</footer>
+  </section>
+
+  <!-- SWORD -->
+  <img src="images/sword.png" id="sword" />
+
+  <script src="main.js"></script>
+</body>
+</html>

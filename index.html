@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ajay | RED SYSTEM</title>
+<title>Ajay | Red System</title>
 
 <!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&family=Rubik+Glitch&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@300..900&family=Rubik+Glitch&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -22,122 +22,142 @@ body{
 }
 
 /* VIDEO */
-.video-bg{position:fixed;inset:0;z-index:-10}
-.video-bg video{
+video{
+  position:fixed;
+  inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  animation:zoom 20s infinite alternate ease-in-out;
-}
-@keyframes zoom{
-  from{transform:scale(1)}
-  to{transform:scale(1.08)}
+  z-index:-10;
 }
 
-/* OVERLAYS */
+/* OVERLAY */
 .overlay{
-  position:fixed;inset:0;
-  background:radial-gradient(circle,rgba(120,0,0,.25),rgba(0,0,0,.9));
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle,rgba(160,0,0,.25),rgba(0,0,0,.92));
   z-index:-9;
-}
-.scanlines{
-  position:fixed;inset:0;
-  background:linear-gradient(rgba(255,0,0,.04) 1px,transparent 1px);
-  background-size:100% 3px;
-  opacity:.15;
-  z-index:-8;
 }
 
 /* HUD */
 .hud{
-  position:fixed;top:12px;left:50%;
+  position:fixed;
+  top:12px;
+  left:50%;
   transform:translateX(-50%);
   font-family:"Rubik Glitch",cursive;
   font-size:12px;
-  letter-spacing:2px;
-  opacity:.8;
-  text-shadow:0 0 12px red;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  text-shadow:0 0 14px red;
   z-index:20;
 }
 
 /* PAGE */
 .page{
-  position:absolute;inset:0;
+  position:absolute;
+  inset:0;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:14px;
   text-align:center;
+  gap:14px;
 }
 .hidden{opacity:0;pointer-events:none}
 
-/* PANELS */
-.panel{
-  padding:14px 28px;
-  border:1px solid rgba(255,0,0,.4);
-  background:rgba(0,0,0,.4);
-  box-shadow:0 0 25px rgba(255,0,0,.3);
+/* SYSTEM TAG */
+.system-tag{
+  padding:8px 20px;
+  border:1px solid rgba(255,0,0,.5);
+  background:rgba(0,0,0,.35);
+  box-shadow:0 0 20px rgba(255,0,0,.35);
+  font-family:"Rubik Glitch",cursive;
+  font-size:12px;
+  letter-spacing:3px;
   text-transform:uppercase;
 }
 
-/* TEXT */
+/* TITLES */
 .title{
-  font-size:36px;
-  letter-spacing:4px;
-  text-shadow:0 0 25px red;
+  font-size:38px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-shadow:0 0 30px red;
 }
-.sub{font-size:13px;letter-spacing:3px;opacity:.85}
-.glitch{
-  font-family:"Rubik Glitch",cursive;
-  font-size:12px;
-  opacity:.75;
+.title::first-letter{font-size:1.25em}
+
+/* SUB */
+.sub{
+  font-size:14px;
+  letter-spacing:1.4px;
+  opacity:.85;
 }
 
 /* FINGERPRINT */
 .fingerprint{
-  width:130px;height:130px;
+  width:130px;
+  height:130px;
   border-radius:50%;
   border:2px solid red;
-  box-shadow:0 0 25px red inset,0 0 25px red;
+  box-shadow:0 0 30px red inset,0 0 40px red;
   position:relative;
 }
-.progress{
-  position:absolute;inset:0;
-  border-radius:50%;
-  background:conic-gradient(red 0deg,transparent 0deg);
-}
 .scan{
-  position:absolute;inset:-8px;
+  position:absolute;
+  inset:-10px;
   border-radius:50%;
-  border-top:2px solid red;
+  border:3px solid transparent;
+  border-top-color:red;
   animation:spin 1.2s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* PROFILE */
+.profile{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+.profile img{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  border:2px solid red;
+  box-shadow:0 0 35px red;
+}
+
 /* LINKS */
 .links a{
   display:block;
-  margin:10px 0;
-  padding:10px 22px;
-  border:1px solid rgba(255,0,0,.4);
-  color:#ff2a2a;
+  margin:12px 0;
+  padding:12px 30px;
+  border-radius:6px;
+  border:1px solid rgba(255,0,0,.5);
   text-decoration:none;
-  background:rgba(0,0,0,.45);
-  box-shadow:0 0 20px rgba(255,0,0,.25);
+  color:#ff2a2a;
+  letter-spacing:2px;
+  box-shadow:0 0 25px rgba(255,0,0,.4);
 }
 
-/* CUT EFFECT */
-.flash{
-  position:fixed;inset:0;
-  background:linear-gradient(90deg,transparent 48%,red 50%,transparent 52%);
-  opacity:0;z-index:30;
-}
+/* SWORD */
 .sword{
-  position:absolute;width:6px;height:170%;
-  background:linear-gradient(#fff,#888);
-  box-shadow:0 0 40px red;
-  opacity:0;z-index:40;
+  position:absolute;
+  width:16px;
+  height:180%;
+  background:linear-gradient(90deg,#444,#fff,#aaa,#555);
+  box-shadow:0 0 50px red,0 0 120px rgba(255,0,0,.8);
+  z-index:9999;
+  opacity:0;
+}
+
+/* FLASH */
+.flash{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(90deg,transparent 47%,#ff0000 50%,transparent 53%);
+  opacity:0;
+  z-index:900;
 }
 
 /* SHAKE */
@@ -154,110 +174,111 @@ body{
 
 <body>
 
-<div class="video-bg">
-  <video id="bgVideo" src="video/bg.mp4" muted loop playsinline></video>
-</div>
+<video id="bgVideo" src="video/bg.mp4" muted loop playsinline></video>
 <div class="overlay"></div>
-<div class="scanlines"></div>
-
-<div class="hud" id="hud">BIOMETRIC SYSTEM • STANDBY</div>
+<div class="hud">Red Biometric System</div>
 <div class="flash" id="flash"></div>
+<div class="sword" id="sword"></div>
 
 <!-- PAGE 1 -->
 <div class="page">
-  <div class="glitch panel">Biometric Interface</div>
-  <div class="title panel">Place Your Finger</div>
-  <div class="sub panel">Hold to scan identity</div>
-
-  <div class="fingerprint">
-    <div class="progress" id="progress"></div>
-    <div class="scan"></div>
-  </div>
+  <div class="system-tag">Biometric Interface</div>
+  <div class="title">Place Your Finger</div>
+  <div class="sub">Hold to authenticate identity</div>
+  <div class="fingerprint"><div class="scan"></div></div>
 </div>
 
 <!-- PAGE 2 -->
 <div class="page hidden">
-  <div class="glitch panel">Vital Scan</div>
-  <div class="title panel">Tracking Heart Rate</div>
-  <div class="sub panel">Pulse confirmed</div>
+  <div class="system-tag">Vital Scan</div>
+  <div class="title">Tracking Heart Rate</div>
+  <div class="sub">Pulse signal locked</div>
 </div>
 
 <!-- PAGE 3 -->
 <div class="page hidden">
-  <div class="glitch panel">Neural Core</div>
-  <div class="title panel">Reading Your Mind</div>
-  <div class="sub panel">Brainwaves synced</div>
+  <div class="system-tag">Neural Core</div>
+  <div class="title">Reading Your Mind</div>
+  <div class="sub">Brainwave pattern synced</div>
 </div>
 
 <!-- PAGE 4 -->
 <div class="page hidden">
-  <div class="glitch panel">Cognitive Matrix</div>
-  <div class="title panel">Measuring Thoughts</div>
-  <div class="sub panel">Intent verified</div>
+  <div class="system-tag">Cognitive Matrix</div>
+  <div class="title">Measuring Thoughts</div>
+  <div class="sub">Intent confirmed</div>
 </div>
 
 <!-- PAGE 5 -->
 <div class="page hidden">
-  <div class="glitch panel">Access Granted</div>
-  <div class="title panel">Ajay</div>
+  <div class="system-tag">Access Granted</div>
+
+  <div class="profile">
+    <img src="profile.jpg">
+    <div>
+      <div class="title">Ajay</div>
+      <div class="sub">I Love Fresh Air 💫✨</div>
+    </div>
+  </div>
+
   <div class="links">
     <a href="https://www.instagram.com/kotl_immortal_ajay" target="_blank">Instagram</a>
     <a href="https://youtube.com/@infinitypowerverse" target="_blank">YouTube</a>
     <a href="https://t.me/no1narutouzumaki" target="_blank">Telegram</a>
   </div>
-  <div class="sub panel">Made by Ajay</div>
-</div>
 
-<div class="sword" id="sword"></div>
+  <div class="sub">Made by Ajay</div>
+</div>
 
 <script>
 const pages=[...document.querySelectorAll(".page")];
 const sword=document.getElementById("sword");
 const flash=document.getElementById("flash");
 const video=document.getElementById("bgVideo");
-const progress=document.getElementById("progress");
-const hud=document.getElementById("hud");
 
-let i=0,hold,angle=0;
+let index=0,started=false,hold;
 
-/* SOUNDS */
 const ambient=new Audio("sounds/ambient.mp3");
 const slash=new Audio("sounds/sword-slash.mp3");
 const unsheath=new Audio("sounds/sword-unsheath.mp3");
 const rock=new Audio("sounds/rock-break.mp3");
-ambient.loop=true;ambient.volume=.45;
+
+ambient.loop=true;
+ambient.volume=.45;
 
 function startHold(){
-  video.play().catch(()=>{});
-  navigator.vibrate?.(40);
-  if(i===0){ambient.play().catch(()=>{});unsheath.play();}
-  hud.textContent="SCANNING...";
-  hold=setInterval(()=>{
-    angle+=8;
-    progress.style.background=`conic-gradient(red ${angle}deg,transparent 0deg)`;
-    if(angle>=360){clearInterval(hold);angle=0;cut();}
-  },40);
+  if(!started){
+    video.play().catch(()=>{});
+    ambient.play().catch(()=>{});
+    unsheath.play().catch(()=>{});
+    started=true;
+  }
+  hold=setTimeout(cut,2200);
 }
-function stopHold(){clearInterval(hold);angle=0;progress.style.background="";}
+function stopHold(){clearTimeout(hold)}
 
 function cut(){
-  if(i>=pages.length-1)return;
-  navigator.vibrate?.([30,20,30]);
+  if(index>=pages.length-1) return;
+
   document.body.classList.add("shake");
   flash.style.opacity=.7;
-  slash.play();rock.play();
+
   sword.style.opacity=1;
   sword.style.left="50%";
-  sword.animate([{top:"-140%"},{top:"140%"}],{duration:700,easing:"ease-in-out"});
+  sword.style.top="-140%";
+
+  slash.play(); rock.play();
+
+  sword.animate([{top:"-140%"},{top:"140%"}],{duration:650});
+
   setTimeout(()=>{
-    pages[i].classList.add("hidden");
-    i++;
-    pages[i].classList.remove("hidden");
+    pages[index].classList.add("hidden");
+    index++;
+    pages[index].classList.remove("hidden");
     sword.style.opacity=0;
     flash.style.opacity=0;
     document.body.classList.remove("shake");
-    hud.textContent="SYSTEM READY";
-  },700);
+  },650);
 }
 
 document.body.addEventListener("touchstart",startHold);

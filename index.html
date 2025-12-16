@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ajay | Red System</title>
 
-<!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@300..900&family=Rubik+Glitch&display=swap" rel="stylesheet">
@@ -15,10 +14,10 @@
 
 body{
   height:100vh;
-  overflow:hidden;
   background:black;
   color:#ff1a1a;
   font-family:"Science Gothic",sans-serif;
+  overflow:hidden;
 }
 
 /* VIDEO */
@@ -39,6 +38,19 @@ video{
   z-index:-9;
 }
 
+/* HUD */
+.hud{
+  position:fixed;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:"Rubik Glitch",cursive;
+  font-size:12px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  text-shadow:0 0 14px red;
+}
+
 /* PAGE */
 .page{
   position:absolute;
@@ -47,86 +59,46 @@ video{
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  gap:16px;
   text-align:center;
-  gap:18px;
 }
 .hidden{display:none}
 
-/* TEXT */
+/* UI */
+.system-tag{
+  padding:8px 20px;
+  border:1px solid red;
+  box-shadow:0 0 20px red;
+  font-family:"Rubik Glitch",cursive;
+  font-size:12px;
+  letter-spacing:3px;
+}
+
 .title{
   font-size:36px;
   text-shadow:0 0 30px red;
 }
-.sub{opacity:.85}
-.glitch{
-  font-family:"Rubik Glitch",cursive;
-  letter-spacing:3px;
-}
+.title::first-letter{font-size:1.3em}
 
-/* FINGERPRINT */
+.sub{font-size:14px;opacity:.8}
+
+/* FINGER */
 .fingerprint{
-  width:130px;
-  height:130px;
+  width:120px;height:120px;
   border-radius:50%;
   border:2px solid red;
   box-shadow:0 0 30px red inset,0 0 40px red;
-  position:relative;
 }
-.scan{
-  position:absolute;
-  inset:-8px;
-  border-radius:50%;
-  border:3px solid transparent;
-  border-top-color:red;
-  animation:spin 1.2s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
 
-/* PROGRESS */
-.progress{
-  width:220px;
-  height:6px;
+/* PASSWORD */
+input{
+  background:black;
   border:1px solid red;
-}
-.bar{
-  height:100%;
-  width:0%;
-  background:red;
-  box-shadow:0 0 15px red;
-}
-
-/* SWORD */
-.sword{
-  position:fixed;
-  width:28px;
-  height:200%;
-  background:linear-gradient(90deg,#111,#fff,#ff3b3b,#fff,#111);
-  box-shadow:0 0 60px red;
-  z-index:999;
-  opacity:0;
-}
-
-/* FLASH */
-.flash{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(90deg,transparent 45%,red 50%,transparent 55%);
-  opacity:0;
-  z-index:998;
-}
-
-/* PROFILE */
-.profile{
-  display:flex;
-  align-items:center;
-  gap:20px;
-}
-.profile img{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  border:2px solid red;
-  box-shadow:0 0 30px red;
+  color:red;
+  padding:10px;
+  text-align:center;
+  letter-spacing:2px;
+  box-shadow:0 0 20px red;
 }
 
 /* LINKS */
@@ -135,9 +107,35 @@ video{
   margin:10px 0;
   padding:12px 30px;
   border:1px solid red;
-  color:red;
   text-decoration:none;
-  box-shadow:0 0 20px rgba(255,0,0,.4);
+  color:red;
+  box-shadow:0 0 25px red;
+}
+
+/* PROFILE */
+.profile{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.profile img{
+  width:90px;height:90px;
+  border-radius:50%;
+  border:2px solid red;
+  box-shadow:0 0 30px red;
+}
+
+/* SWORD */
+.sword{
+  position:fixed;
+  width:12px;
+  height:200%;
+  background:linear-gradient(90deg,#555,#fff,#aaa);
+  box-shadow:0 0 80px red;
+  left:50%;
+  top:-150%;
+  opacity:0;
+  z-index:999;
 }
 </style>
 </head>
@@ -146,38 +144,40 @@ video{
 
 <video id="bgVideo" src="video/bg.mp4" muted loop playsinline></video>
 <div class="overlay"></div>
-<div class="flash" id="flash"></div>
+<div class="hud">RED BIOMETRIC SYSTEM</div>
 <div class="sword" id="sword"></div>
 
-<!-- PAGE 0 -->
-<div class="page" id="p0">
-  <div class="title glitch" id="glitchText"></div>
-  <div class="sub">Biometric Authentication</div>
-
-  <div class="fingerprint" id="finger">
-    <div class="scan"></div>
-  </div>
-
-  <div class="progress"><div class="bar" id="bar"></div></div>
-</div>
-
 <!-- PAGE 1 -->
-<div class="page hidden" id="p1">
-  <div class="title">Vital Scan</div>
-  <div class="sub">Tracking Heart Rate</div>
-  <button onclick="cut()">Continue</button>
+<div class="page">
+  <div class="system-tag">Biometric Scan</div>
+  <div class="title">Place Finger</div>
+  <div class="sub">Tap or hold to continue</div>
+  <div class="fingerprint"></div>
 </div>
 
-<!-- PAGE 2 -->
-<div class="page hidden" id="p2">
-  <div class="title">Neural Core</div>
-  <div class="sub">Reading Your Mind</div>
-  <button onclick="cut()">Continue</button>
+<!-- PAGE 2 (PASSWORD) -->
+<div class="page hidden">
+  <div class="system-tag">Security Check</div>
+  <div class="title">Enter Password</div>
+  <input id="password" type="password" placeholder="•••••••">
+  <div class="sub">Password required</div>
 </div>
 
 <!-- PAGE 3 -->
-<div class="page hidden" id="p3">
-  <div class="title">Access Granted</div>
+<div class="page hidden">
+  <div class="system-tag">Neural Scan</div>
+  <div class="title">Mind Verified</div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page hidden">
+  <div class="system-tag">System Core</div>
+  <div class="title">Access Loading</div>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page hidden">
+  <div class="system-tag">Access Granted</div>
 
   <div class="profile">
     <img src="images/profile.jpg">
@@ -192,116 +192,64 @@ video{
     <a href="https://youtube.com/@infinitypowerverse" target="_blank">YouTube</a>
     <a href="https://t.me/no1narutouzumaki" target="_blank">Telegram</a>
   </div>
-
-  <div class="sub">Made by Ajay</div>
 </div>
 
 <script>
-/* PAGES */
-const pages=[p0,p1,p2,p3];
-let index=0;
-
-/* ELEMENTS */
-const finger=document.getElementById("finger");
-const bar=document.getElementById("bar");
+const pages=document.querySelectorAll(".page");
 const sword=document.getElementById("sword");
-const flash=document.getElementById("flash");
 const video=document.getElementById("bgVideo");
 
-/* AUDIO */
 const ambient=new Audio("sounds/ambient.mp3");
 const slash=new Audio("sounds/sword-slash.mp3");
 const unsheath=new Audio("sounds/sword-unsheath.mp3");
-const rock=new Audio("sounds/rock-break.mp3");
+
 ambient.loop=true;
-ambient.volume=.4;
+ambient.volume=0.4;
 
-/* GLITCH TEXT */
-const text="Place Your Finger";
-let t=0;
-setInterval(()=>{
-  glitchText.textContent=text.slice(0,t++);
-  if(t>text.length) t=0;
-},140);
+let index=0;
+let unlocked=false;
 
-/* HOLD SCAN */
-let scanning=false,progress=0,progressTimer;
-
-function startHold(){
-  if(scanning) return;
-  scanning=true;
-  progress=0;
-  bar.style.width="0%";
-  navigator.vibrate?.(40);
-
-  progressTimer=setInterval(()=>{
-    progress+=2;
-    bar.style.width=progress+"%";
-    if(progress>=100){
-      clearInterval(progressTimer);
-      unlock();
-    }
-  },40);
-}
-
-function stopHold(){
-  if(progress<100){
-    clearInterval(progressTimer);
-    scanning=false;
-    progress=0;
-    bar.style.width="0%";
-  }
-}
-
-/* EVENTS */
-finger.addEventListener("touchstart",startHold);
-finger.addEventListener("touchend",stopHold);
-finger.addEventListener("mousedown",startHold);
-finger.addEventListener("mouseup",stopHold);
-
-/* UNLOCK */
-function unlock(){
+function playMedia(){
   video.play().catch(()=>{});
   ambient.play().catch(()=>{});
-  unsheath.play();
-  next();
 }
 
-/* PAGE CHANGE */
-function next(){
-  pages[index].classList.add("hidden");
-  index++;
-  pages[index].classList.remove("hidden");
-}
+function cutNext(){
+  if(index===1 && !unlocked) return;
 
-/* SWORD CUT (DIFFERENT ANGLES) */
-function cut(){
-  const angles=[
-    ["50%","-140%","50%","140%"],          // vertical
-    ["120%","-40%","-40%","140%"],         // right → left
-    ["-40%","-40%","120%","140%"]          // left → right
-  ];
-  const a=angles[index%3];
+  if(index>=pages.length-1) return;
 
   sword.style.opacity=1;
-  sword.style.left=a[0];
-  sword.style.top=a[1];
-  flash.style.opacity=.7;
+  sword.style.top="-150%";
+  sword.animate([{top:"-150%"},{top:"150%"}],{duration:500});
 
-  slash.play(); rock.play();
-
-  sword.animate(
-    [{left:a[0],top:a[1]},{left:a[2],top:a[3]}],
-    {duration:600}
-  );
+  slash.play();
 
   setTimeout(()=>{
+    pages[index].classList.add("hidden");
+    index++;
+    pages[index].classList.remove("hidden");
     sword.style.opacity=0;
-    flash.style.opacity=0;
-    next();
-  },600);
+  },500);
 }
+
+document.body.addEventListener("click",()=>{
+  playMedia();
+  if(index!==1) cutNext();
+});
+
+document.getElementById("password").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    if(e.target.value==="sword69"){
+      unlocked=true;
+      unsheath.play();
+      cutNext();
+    }else{
+      alert("ACCESS DENIED");
+    }
+  }
+});
 </script>
 
 </body>
-</html>
+  </html>

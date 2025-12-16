@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ajay | Red System</title>
 
-<!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@300..900&family=Rubik+Glitch&display=swap" rel="stylesheet">
@@ -21,7 +20,6 @@ body{
   font-family:"Science Gothic",sans-serif;
 }
 
-/* VIDEO */
 video{
   position:fixed;
   inset:0;
@@ -31,7 +29,6 @@ video{
   z-index:-10;
 }
 
-/* OVERLAY */
 .overlay{
   position:fixed;
   inset:0;
@@ -39,7 +36,6 @@ video{
   z-index:-9;
 }
 
-/* HUD */
 .hud{
   position:fixed;
   top:12px;
@@ -53,7 +49,6 @@ video{
   z-index:20;
 }
 
-/* PAGE */
 .page{
   position:absolute;
   inset:0;
@@ -66,7 +61,6 @@ video{
 }
 .hidden{opacity:0;pointer-events:none}
 
-/* SYSTEM TAG */
 .system-tag{
   padding:8px 20px;
   border:1px solid rgba(255,0,0,.5);
@@ -75,10 +69,8 @@ video{
   font-family:"Rubik Glitch",cursive;
   font-size:12px;
   letter-spacing:3px;
-  text-transform:uppercase;
 }
 
-/* TITLES */
 .title{
   font-size:38px;
   font-weight:700;
@@ -86,14 +78,12 @@ video{
 }
 .title::first-letter{font-size:1.25em}
 
-/* SUB */
 .sub{
   font-size:14px;
   letter-spacing:1.4px;
   opacity:.85;
 }
 
-/* FINGERPRINT */
 .fingerprint{
   width:130px;
   height:130px;
@@ -101,6 +91,7 @@ video{
   border:2px solid red;
   box-shadow:0 0 30px red inset,0 0 40px red;
   position:relative;
+  cursor:pointer;
 }
 .scan{
   position:absolute;
@@ -112,7 +103,6 @@ video{
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* PROFILE */
 .profile{
   display:flex;
   align-items:center;
@@ -126,7 +116,6 @@ video{
   box-shadow:0 0 35px red;
 }
 
-/* LINKS */
 .links a{
   display:block;
   margin:12px 0;
@@ -137,14 +126,8 @@ video{
   color:#ff2a2a;
   letter-spacing:2px;
   box-shadow:0 0 25px rgba(255,0,0,.4);
-  transition:.3s;
-}
-.links a:hover{
-  box-shadow:0 0 40px red;
-  transform:translateY(-2px);
 }
 
-/* SWORD */
 .sword{
   position:absolute;
   width:26px;
@@ -155,7 +138,6 @@ video{
   opacity:0;
 }
 
-/* FLASH */
 .flash{
   position:fixed;
   inset:0;
@@ -164,7 +146,6 @@ video{
   z-index:900;
 }
 
-/* SHAKE */
 .shake{animation:shake .35s}
 @keyframes shake{
   0%{transform:translate(0)}
@@ -178,47 +159,42 @@ video{
 
 <body>
 
-<video id="bgVideo" src="video/bg.mp4" muted autoplay loop playsinline></video>
+<video id="bgVideo" src="video/bg.mp4" muted loop playsinline></video>
 <div class="overlay"></div>
 <div class="hud">Red Biometric System</div>
 <div class="flash" id="flash"></div>
 <div class="sword" id="sword"></div>
 
-<!-- PAGE 1 -->
 <div class="page">
   <div class="system-tag">Biometric Interface</div>
   <div class="title">Place Your Finger</div>
   <div class="sub">Hold to authenticate identity</div>
-  <div class="fingerprint"><div class="scan"></div></div>
+  <div class="fingerprint" id="finger"><div class="scan"></div></div>
 </div>
 
-<!-- PAGE 2 -->
 <div class="page hidden">
   <div class="system-tag">Vital Scan</div>
   <div class="title">Tracking Heart Rate</div>
   <div class="sub">Pulse signal locked</div>
 </div>
 
-<!-- PAGE 3 -->
 <div class="page hidden">
   <div class="system-tag">Neural Core</div>
   <div class="title">Reading Your Mind</div>
-  <div class="sub">Brainwave pattern synced</div>
+  <div class="sub">Brainwave synced</div>
 </div>
 
-<!-- PAGE 4 -->
 <div class="page hidden">
   <div class="system-tag">Cognitive Matrix</div>
   <div class="title">Measuring Thoughts</div>
   <div class="sub">Intent confirmed</div>
 </div>
 
-<!-- PAGE 5 -->
 <div class="page hidden">
   <div class="system-tag">Access Granted</div>
 
   <div class="profile">
-    <img src="profile.jpg">
+    <img src="images/profile.jpg">
     <div>
       <div class="title">Ajay</div>
       <div class="sub">I Love Fresh Air 💫✨</div>
@@ -239,6 +215,7 @@ const pages=[...document.querySelectorAll(".page")];
 const sword=document.getElementById("sword");
 const flash=document.getElementById("flash");
 const video=document.getElementById("bgVideo");
+const finger=document.getElementById("finger");
 
 let index=0,started=false,hold;
 
@@ -246,15 +223,14 @@ const ambient=new Audio("sounds/ambient.mp3");
 const slash=new Audio("sounds/sword-slash.mp3");
 const unsheath=new Audio("sounds/sword-unsheath.mp3");
 const rock=new Audio("sounds/rock-break.mp3");
-
 ambient.loop=true;
 ambient.volume=.45;
 
 const cuts=[
-  {x:"50%",y:"-140%",tx:"50%",ty:"140%"},            // page 1
-  {x:"120%",y:"-40%",tx:"-40%",ty:"140%"},           // page 2 ↘
-  {x:"-40%",y:"-40%",tx:"120%",ty:"140%"},           // page 3 ↙
-  {x:"50%",y:"-140%",tx:"50%",ty:"140%"}             // page 4
+  {sx:"50%",sy:"-140%",ex:"50%",ey:"140%"},
+  {sx:"120%",sy:"-40%",ex:"-40%",ey:"140%"},
+  {sx:"-40%",sy:"-40%",ex:"120%",ey:"140%"},
+  {sx:"50%",sy:"140%",ex:"50%",ey:"-140%"}
 ];
 
 function startHold(){
@@ -266,26 +242,28 @@ function startHold(){
       unsheath.play().catch(()=>{});
     },300);
   }
-  hold=setTimeout(cut,2200);
+  hold=setTimeout(cut,2000);
 }
+
 function stopHold(){clearTimeout(hold)}
 
 function cut(){
   if(index>=pages.length-1) return;
 
-  const c=cuts[index]||cuts[0];
-
+  const c=cuts[index] || cuts[0];
   document.body.classList.add("shake");
   flash.style.opacity=.7;
 
   sword.style.opacity=1;
-  sword.style.left=c.x;
-  sword.style.top=c.y;
+  sword.style.left=c.sx;
+  sword.style.top=c.sy;
 
+  slash.currentTime=0;
+  rock.currentTime=0;
   slash.play(); rock.play();
 
   sword.animate(
-    [{left:c.x,top:c.y},{left:c.tx,top:c.ty}],
+    [{left:c.sx,top:c.sy},{left:c.ex,top:c.ey}],
     {duration:650,easing:"ease-in"}
   );
 
@@ -299,10 +277,10 @@ function cut(){
   },650);
 }
 
-pages[0].addEventListener("touchstart",startHold);
-pages[0].addEventListener("touchend",stopHold);
-pages[0].addEventListener("mousedown",startHold);
-pages[0].addEventListener("mouseup",stopHold);
+finger.addEventListener("touchstart",startHold);
+finger.addEventListener("touchend",stopHold);
+finger.addEventListener("mousedown",startHold);
+finger.addEventListener("mouseup",stopHold);
 </script>
 
 </body>

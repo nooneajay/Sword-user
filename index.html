@@ -82,7 +82,6 @@ video{
 .title{
   font-size:38px;
   font-weight:700;
-  letter-spacing:1px;
   text-shadow:0 0 30px red;
 }
 .title::first-letter{font-size:1.25em}
@@ -131,22 +130,27 @@ video{
 .links a{
   display:block;
   margin:12px 0;
-  padding:12px 30px;
+  padding:14px 34px;
   border-radius:6px;
-  border:1px solid rgba(255,0,0,.5);
+  border:1px solid rgba(255,0,0,.6);
   text-decoration:none;
   color:#ff2a2a;
   letter-spacing:2px;
   box-shadow:0 0 25px rgba(255,0,0,.4);
+  transition:.3s;
+}
+.links a:hover{
+  box-shadow:0 0 40px red;
+  transform:translateY(-2px);
 }
 
 /* SWORD */
 .sword{
   position:absolute;
-  width:16px;
-  height:180%;
-  background:linear-gradient(90deg,#444,#fff,#aaa,#555);
-  box-shadow:0 0 50px red,0 0 120px rgba(255,0,0,.8);
+  width:26px;
+  height:200%;
+  background:linear-gradient(90deg,#111,#fff,#ff4d4d,#fff,#111);
+  box-shadow:0 0 50px red,0 0 120px rgba(255,0,0,.9);
   z-index:9999;
   opacity:0;
 }
@@ -174,7 +178,7 @@ video{
 
 <body>
 
-<video id="bgVideo" src="video/bg.mp4" muted loop playsinline></video>
+<video id="bgVideo" src="video/bg.mp4" muted autoplay loop playsinline></video>
 <div class="overlay"></div>
 <div class="hud">Red Biometric System</div>
 <div class="flash" id="flash"></div>
@@ -246,12 +250,21 @@ const rock=new Audio("sounds/rock-break.mp3");
 ambient.loop=true;
 ambient.volume=.45;
 
+const cuts=[
+  {x:"50%",y:"-140%",tx:"50%",ty:"140%"},            // page 1
+  {x:"120%",y:"-40%",tx:"-40%",ty:"140%"},           // page 2 ↘
+  {x:"-40%",y:"-40%",tx:"120%",ty:"140%"},           // page 3 ↙
+  {x:"50%",y:"-140%",tx:"50%",ty:"140%"}             // page 4
+];
+
 function startHold(){
   if(!started){
-    video.play().catch(()=>{});
-    ambient.play().catch(()=>{});
-    unsheath.play().catch(()=>{});
     started=true;
+    video.play().catch(()=>{});
+    setTimeout(()=>{
+      ambient.play().catch(()=>{});
+      unsheath.play().catch(()=>{});
+    },300);
   }
   hold=setTimeout(cut,2200);
 }
@@ -260,16 +273,21 @@ function stopHold(){clearTimeout(hold)}
 function cut(){
   if(index>=pages.length-1) return;
 
+  const c=cuts[index]||cuts[0];
+
   document.body.classList.add("shake");
   flash.style.opacity=.7;
 
   sword.style.opacity=1;
-  sword.style.left="50%";
-  sword.style.top="-140%";
+  sword.style.left=c.x;
+  sword.style.top=c.y;
 
   slash.play(); rock.play();
 
-  sword.animate([{top:"-140%"},{top:"140%"}],{duration:650});
+  sword.animate(
+    [{left:c.x,top:c.y},{left:c.tx,top:c.ty}],
+    {duration:650,easing:"ease-in"}
+  );
 
   setTimeout(()=>{
     pages[index].classList.add("hidden");
@@ -281,10 +299,10 @@ function cut(){
   },650);
 }
 
-document.body.addEventListener("touchstart",startHold);
-document.body.addEventListener("touchend",stopHold);
-document.body.addEventListener("mousedown",startHold);
-document.body.addEventListener("mouseup",stopHold);
+pages[0].addEventListener("touchstart",startHold);
+pages[0].addEventListener("touchend",stopHold);
+pages[0].addEventListener("mousedown",startHold);
+pages[0].addEventListener("mouseup",stopHold);
 </script>
 
 </body>

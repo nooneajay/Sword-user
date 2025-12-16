@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ajay | System Access</title>
+<title>Ajay | RED SYSTEM</title>
 
-<!-- GOOGLE FONTS -->
+<!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&family=Rubik+Glitch&display=swap" rel="stylesheet">
@@ -21,135 +21,126 @@ body{
   font-family:"Science Gothic",sans-serif;
 }
 
-/* VIDEO BACKGROUND */
-.video-bg{
-  position:fixed;
-  inset:0;
-  z-index:-5;
-}
+/* VIDEO */
+.video-bg{position:fixed;inset:0;z-index:-10}
 .video-bg video{
   width:100%;
   height:100%;
   object-fit:cover;
+  animation:zoom 20s infinite alternate ease-in-out;
+}
+@keyframes zoom{
+  from{transform:scale(1)}
+  to{transform:scale(1.08)}
 }
 
-/* RED CINEMATIC OVERLAY */
+/* OVERLAYS */
 .overlay{
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at center, rgba(140,0,0,.25), rgba(0,0,0,.9));
-  z-index:-4;
+  position:fixed;inset:0;
+  background:radial-gradient(circle,rgba(120,0,0,.25),rgba(0,0,0,.9));
+  z-index:-9;
+}
+.scanlines{
+  position:fixed;inset:0;
+  background:linear-gradient(rgba(255,0,0,.04) 1px,transparent 1px);
+  background-size:100% 3px;
+  opacity:.15;
+  z-index:-8;
 }
 
-/* TOP HUD */
+/* HUD */
 .hud{
-  position:fixed;
-  top:14px;
-  left:50%;
+  position:fixed;top:12px;left:50%;
   transform:translateX(-50%);
   font-family:"Rubik Glitch",cursive;
   font-size:12px;
   letter-spacing:2px;
-  opacity:.75;
+  opacity:.8;
   text-shadow:0 0 12px red;
-  z-index:10;
+  z-index:20;
 }
 
-/* PAGE SYSTEM */
+/* PAGE */
 .page{
-  position:absolute;
-  inset:0;
+  position:absolute;inset:0;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   gap:14px;
   text-align:center;
-  transition:.35s;
 }
 .hidden{opacity:0;pointer-events:none}
 
-/* TITLES */
-.title{
-  font-size:42px;
-  letter-spacing:4px;
+/* PANELS */
+.panel{
+  padding:14px 28px;
+  border:1px solid rgba(255,0,0,.4);
+  background:rgba(0,0,0,.4);
+  box-shadow:0 0 25px rgba(255,0,0,.3);
   text-transform:uppercase;
-  text-shadow:
-    0 0 10px red,
-    0 0 22px rgba(255,0,0,.8),
-    0 0 40px rgba(255,0,0,.6);
 }
 
-.sub{
-  font-size:14px;
-  letter-spacing:3px;
-  opacity:.85;
+/* TEXT */
+.title{
+  font-size:36px;
+  letter-spacing:4px;
+  text-shadow:0 0 25px red;
 }
-
+.sub{font-size:13px;letter-spacing:3px;opacity:.85}
 .glitch{
   font-family:"Rubik Glitch",cursive;
-  font-size:13px;
+  font-size:12px;
   opacity:.75;
 }
 
+/* FINGERPRINT */
+.fingerprint{
+  width:130px;height:130px;
+  border-radius:50%;
+  border:2px solid red;
+  box-shadow:0 0 25px red inset,0 0 25px red;
+  position:relative;
+}
+.progress{
+  position:absolute;inset:0;
+  border-radius:50%;
+  background:conic-gradient(red 0deg,transparent 0deg);
+}
+.scan{
+  position:absolute;inset:-8px;
+  border-radius:50%;
+  border-top:2px solid red;
+  animation:spin 1.2s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 /* LINKS */
 .links a{
+  display:block;
+  margin:10px 0;
+  padding:10px 22px;
+  border:1px solid rgba(255,0,0,.4);
   color:#ff2a2a;
   text-decoration:none;
-  letter-spacing:2px;
-  margin:10px 0;
-  display:block;
-  transition:.25s;
-}
-.links a:hover{
-  transform:scale(1.1);
-  text-shadow:0 0 20px red;
+  background:rgba(0,0,0,.45);
+  box-shadow:0 0 20px rgba(255,0,0,.25);
 }
 
-/* SWORD */
+/* CUT EFFECT */
+.flash{
+  position:fixed;inset:0;
+  background:linear-gradient(90deg,transparent 48%,red 50%,transparent 52%);
+  opacity:0;z-index:30;
+}
 .sword{
-  position:absolute;
-  width:6px;
-  height:170%;
+  position:absolute;width:6px;height:170%;
   background:linear-gradient(#fff,#888);
   box-shadow:0 0 40px red;
-  opacity:0;
-  z-index:20;
+  opacity:0;z-index:40;
 }
 
-/* FLASH CUT */
-.flash{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(
-    90deg,
-    transparent 48%,
-    #ff0000 50%,
-    transparent 52%
-  );
-  opacity:0;
-  z-index:15;
-}
-
-/* CUT ANIMATIONS */
-.cut-vertical{
-  animation:cutDown .65s cubic-bezier(.4,0,.2,1) forwards;
-}
-@keyframes cutDown{
-  from{top:-140%;left:50%;opacity:1}
-  to{top:140%;left:50%}
-}
-
-.cut-diagonal{
-  animation:cutDiag .7s cubic-bezier(.4,0,.2,1) forwards;
-}
-@keyframes cutDiag{
-  from{top:-140%;left:20%;opacity:1;transform:rotate(25deg)}
-  to{top:140%;left:80%;transform:rotate(25deg)}
-}
-
-/* SCREEN SHAKE */
+/* SHAKE */
 .shake{animation:shake .35s}
 @keyframes shake{
   0%{transform:translate(0)}
@@ -163,51 +154,58 @@ body{
 
 <body>
 
-<!-- VIDEO -->
 <div class="video-bg">
-  <video src="video/bg.mp4" autoplay muted loop playsinline></video>
+  <video id="bgVideo" src="video/bg.mp4" muted loop playsinline></video>
 </div>
 <div class="overlay"></div>
+<div class="scanlines"></div>
 
-<!-- HUD -->
-<div class="hud">SYSTEM ONLINE • RED PROTOCOL ACTIVE</div>
-
+<div class="hud" id="hud">BIOMETRIC SYSTEM • STANDBY</div>
 <div class="flash" id="flash"></div>
 
-<!-- PAGES -->
+<!-- PAGE 1 -->
 <div class="page">
-  <div class="glitch">BIOMETRIC INTERFACE</div>
-  <div class="title">Place Your Finger</div>
-  <div class="sub">Hold to initiate scan</div>
+  <div class="glitch panel">Biometric Interface</div>
+  <div class="title panel">Place Your Finger</div>
+  <div class="sub panel">Hold to scan identity</div>
+
+  <div class="fingerprint">
+    <div class="progress" id="progress"></div>
+    <div class="scan"></div>
+  </div>
 </div>
 
+<!-- PAGE 2 -->
 <div class="page hidden">
-  <div class="glitch">VITAL ANALYSIS</div>
-  <div class="title">Tracking Heart Rate</div>
-  <div class="sub">Pulse stability confirmed</div>
+  <div class="glitch panel">Vital Scan</div>
+  <div class="title panel">Tracking Heart Rate</div>
+  <div class="sub panel">Pulse confirmed</div>
 </div>
 
+<!-- PAGE 3 -->
 <div class="page hidden">
-  <div class="glitch">NEURAL CORE</div>
-  <div class="title">Reading Your Mind</div>
-  <div class="sub">Neural pathways synced</div>
+  <div class="glitch panel">Neural Core</div>
+  <div class="title panel">Reading Your Mind</div>
+  <div class="sub panel">Brainwaves synced</div>
 </div>
 
+<!-- PAGE 4 -->
 <div class="page hidden">
-  <div class="glitch">COGNITIVE MATRIX</div>
-  <div class="title">Measuring Thoughts</div>
-  <div class="sub">Intent verified</div>
+  <div class="glitch panel">Cognitive Matrix</div>
+  <div class="title panel">Measuring Thoughts</div>
+  <div class="sub panel">Intent verified</div>
 </div>
 
+<!-- PAGE 5 -->
 <div class="page hidden">
-  <div class="glitch">ACCESS GRANTED</div>
-  <div class="title">Ajay</div>
+  <div class="glitch panel">Access Granted</div>
+  <div class="title panel">Ajay</div>
   <div class="links">
     <a href="https://www.instagram.com/kotl_immortal_ajay" target="_blank">Instagram</a>
     <a href="https://youtube.com/@infinitypowerverse" target="_blank">YouTube</a>
     <a href="https://t.me/no1narutouzumaki" target="_blank">Telegram</a>
   </div>
-  <div class="sub">Made by Ajay</div>
+  <div class="sub panel">Made by Ajay</div>
 </div>
 
 <div class="sword" id="sword"></div>
@@ -216,46 +214,52 @@ body{
 const pages=[...document.querySelectorAll(".page")];
 const sword=document.getElementById("sword");
 const flash=document.getElementById("flash");
-let i=0,hold;
+const video=document.getElementById("bgVideo");
+const progress=document.getElementById("progress");
+const hud=document.getElementById("hud");
+
+let i=0,hold,angle=0;
 
 /* SOUNDS */
 const ambient=new Audio("sounds/ambient.mp3");
 const slash=new Audio("sounds/sword-slash.mp3");
 const unsheath=new Audio("sounds/sword-unsheath.mp3");
 const rock=new Audio("sounds/rock-break.mp3");
-ambient.loop=true; ambient.volume=.45;
+ambient.loop=true;ambient.volume=.45;
 
 function startHold(){
-  if(i===0){
-    ambient.play().catch(()=>{});
-    unsheath.play();
-  }
-  hold=setTimeout(cut,2300);
+  video.play().catch(()=>{});
+  navigator.vibrate?.(40);
+  if(i===0){ambient.play().catch(()=>{});unsheath.play();}
+  hud.textContent="SCANNING...";
+  hold=setInterval(()=>{
+    angle+=8;
+    progress.style.background=`conic-gradient(red ${angle}deg,transparent 0deg)`;
+    if(angle>=360){clearInterval(hold);angle=0;cut();}
+  },40);
 }
-function stopHold(){clearTimeout(hold)}
+function stopHold(){clearInterval(hold);angle=0;progress.style.background="";}
 
 function cut(){
   if(i>=pages.length-1)return;
-
+  navigator.vibrate?.([30,20,30]);
   document.body.classList.add("shake");
   flash.style.opacity=.7;
-  slash.play(); rock.play();
-
+  slash.play();rock.play();
   sword.style.opacity=1;
-  sword.className="sword "+(i%2===0?"cut-vertical":"cut-diagonal");
-
+  sword.style.left="50%";
+  sword.animate([{top:"-140%"},{top:"140%"}],{duration:700,easing:"ease-in-out"});
   setTimeout(()=>{
     pages[i].classList.add("hidden");
     i++;
     pages[i].classList.remove("hidden");
-    sword.className="sword";
     sword.style.opacity=0;
     flash.style.opacity=0;
     document.body.classList.remove("shake");
+    hud.textContent="SYSTEM READY";
   },700);
 }
 
-/* INPUT */
 document.body.addEventListener("touchstart",startHold);
 document.body.addEventListener("touchend",stopHold);
 document.body.addEventListener("mousedown",startHold);
@@ -263,4 +267,4 @@ document.body.addEventListener("mouseup",stopHold);
 </script>
 
 </body>
-  </html>
+</html>

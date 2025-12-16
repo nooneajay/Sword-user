@@ -1,10 +1,34 @@
-- name: Create branch and commit extracted files
-  run: |
-    git config user.name "github-actions"
-    git config user.email "github-actions@github.com"
+name: Extract sounds
 
-    BRANCH="extracted-sounds-${{ github.run_id }}"
-    git checkout -b "$BRANCH"
-    git add sounds
-    git commit -m "${{ github.event.inputs.commit_message }}"
-    git push origin "$BRANCH"
+on:
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Verify sounds.zip exists
+        run: |
+          ls -la
+          if [ ! -f sounds.zip ]; then
+            echo "sounds.zip not found"
+            exit 1
+          fi
+
+      - name: Extract sounds
+        run: |
+          unzip -o sounds.zip -d sounds
+
+      - name: Commit extracted sounds
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git checkout -b extracted-sounds
+          git add sounds
+          git commit -m "Add extracted sounds"
+          git push origin extracted-sounds

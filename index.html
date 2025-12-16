@@ -36,19 +36,6 @@ video{
   z-index:-9;
 }
 
-.hud{
-  position:fixed;
-  top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  font-family:"Rubik Glitch",cursive;
-  font-size:12px;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  text-shadow:0 0 14px red;
-  z-index:20;
-}
-
 .page{
   position:absolute;
   inset:0;
@@ -57,33 +44,22 @@ video{
   justify-content:center;
   align-items:center;
   text-align:center;
-  gap:14px;
+  gap:18px;
 }
-.hidden{opacity:0;pointer-events:none}
+.hidden{display:none}
 
-.system-tag{
-  padding:8px 20px;
-  border:1px solid rgba(255,0,0,.5);
-  background:rgba(0,0,0,.35);
-  box-shadow:0 0 20px rgba(255,0,0,.35);
+.title{
+  font-size:36px;
+  text-shadow:0 0 30px red;
+}
+.sub{opacity:.85}
+
+.glitch{
   font-family:"Rubik Glitch",cursive;
-  font-size:12px;
   letter-spacing:3px;
 }
 
-.title{
-  font-size:38px;
-  font-weight:700;
-  text-shadow:0 0 30px red;
-}
-.title::first-letter{font-size:1.25em}
-
-.sub{
-  font-size:14px;
-  letter-spacing:1.4px;
-  opacity:.85;
-}
-
+/* Fingerprint */
 .fingerprint{
   width:130px;
   height:130px;
@@ -95,7 +71,7 @@ video{
 }
 .scan{
   position:absolute;
-  inset:-10px;
+  inset:-8px;
   border-radius:50%;
   border:3px solid transparent;
   border-top-color:red;
@@ -103,56 +79,59 @@ video{
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.profile{
-  display:flex;
-  align-items:center;
-  gap:18px;
+/* Progress */
+.progress{
+  width:220px;
+  height:6px;
+  border:1px solid red;
 }
-.profile img{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  border:2px solid red;
-  box-shadow:0 0 35px red;
-}
-
-.links a{
-  display:block;
-  margin:12px 0;
-  padding:14px 34px;
-  border-radius:6px;
-  border:1px solid rgba(255,0,0,.6);
-  text-decoration:none;
-  color:#ff2a2a;
-  letter-spacing:2px;
-  box-shadow:0 0 25px rgba(255,0,0,.4);
+.bar{
+  height:100%;
+  width:0%;
+  background:red;
+  box-shadow:0 0 15px red;
 }
 
+/* Sword */
 .sword{
-  position:absolute;
-  width:26px;
+  position:fixed;
+  width:28px;
   height:200%;
-  background:linear-gradient(90deg,#111,#fff,#ff4d4d,#fff,#111);
-  box-shadow:0 0 50px red,0 0 120px rgba(255,0,0,.9);
-  z-index:9999;
+  background:linear-gradient(90deg,#111,#fff,#ff3b3b,#fff,#111);
+  box-shadow:0 0 60px red;
+  z-index:999;
   opacity:0;
 }
 
 .flash{
   position:fixed;
   inset:0;
-  background:linear-gradient(90deg,transparent 47%,#ff0000 50%,transparent 53%);
+  background:linear-gradient(90deg,transparent 45%,red 50%,transparent 55%);
   opacity:0;
-  z-index:900;
+  z-index:998;
 }
 
-.shake{animation:shake .35s}
-@keyframes shake{
-  0%{transform:translate(0)}
-  25%{transform:translate(-6px,4px)}
-  50%{transform:translate(6px,-4px)}
-  75%{transform:translate(-4px,3px)}
-  100%{transform:translate(0)}
+/* Profile */
+.profile{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.profile img{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  border:2px solid red;
+  box-shadow:0 0 30px red;
+}
+
+.links a{
+  display:block;
+  margin:10px 0;
+  padding:12px 30px;
+  border:1px solid red;
+  color:red;
+  text-decoration:none;
 }
 </style>
 </head>
@@ -161,38 +140,36 @@ video{
 
 <video id="bgVideo" src="video/bg.mp4" muted loop playsinline></video>
 <div class="overlay"></div>
-<div class="hud">Red Biometric System</div>
 <div class="flash" id="flash"></div>
 <div class="sword" id="sword"></div>
 
-<div class="page">
-  <div class="system-tag">Biometric Interface</div>
-  <div class="title">Place Your Finger</div>
-  <div class="sub">Hold to authenticate identity</div>
-  <div class="fingerprint" id="finger"><div class="scan"></div></div>
+<!-- PAGE 0 -->
+<div class="page" id="p0">
+  <div class="title glitch" id="glitchText"></div>
+  <div class="sub">Biometric Authentication</div>
+
+  <div class="fingerprint" onclick="startScan()">
+    <div class="scan"></div>
+  </div>
+
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="sub" id="err"></div>
 </div>
 
-<div class="page hidden">
-  <div class="system-tag">Vital Scan</div>
-  <div class="title">Tracking Heart Rate</div>
-  <div class="sub">Pulse signal locked</div>
+<div class="page hidden" id="p1">
+  <div class="title">Vital Scan</div>
+  <div class="sub">System Online</div>
+  <button onclick="cut()">Continue</button>
 </div>
 
-<div class="page hidden">
-  <div class="system-tag">Neural Core</div>
-  <div class="title">Reading Your Mind</div>
-  <div class="sub">Brainwave synced</div>
+<div class="page hidden" id="p2">
+  <div class="title">Neural Core</div>
+  <div class="sub">Mind Synced</div>
+  <button onclick="cut()">Continue</button>
 </div>
 
-<div class="page hidden">
-  <div class="system-tag">Cognitive Matrix</div>
-  <div class="title">Measuring Thoughts</div>
-  <div class="sub">Intent confirmed</div>
-</div>
-
-<div class="page hidden">
-  <div class="system-tag">Access Granted</div>
-
+<div class="page hidden" id="p3">
+  <div class="title">Access Granted</div>
   <div class="profile">
     <img src="images/profile.jpg">
     <div>
@@ -206,82 +183,90 @@ video{
     <a href="https://youtube.com/@infinitypowerverse" target="_blank">YouTube</a>
     <a href="https://t.me/no1narutouzumaki" target="_blank">Telegram</a>
   </div>
-
-  <div class="sub">Made by Ajay</div>
 </div>
 
 <script>
-const pages=[...document.querySelectorAll(".page")];
+const pages=[p0,p1,p2,p3];
+let i=0, scanning=false;
+
+const video=bgVideo;
 const sword=document.getElementById("sword");
 const flash=document.getElementById("flash");
-const video=document.getElementById("bgVideo");
-const finger=document.getElementById("finger");
-
-let index=0,started=false,hold;
+const bar=document.getElementById("bar");
 
 const ambient=new Audio("sounds/ambient.mp3");
 const slash=new Audio("sounds/sword-slash.mp3");
 const unsheath=new Audio("sounds/sword-unsheath.mp3");
 const rock=new Audio("sounds/rock-break.mp3");
-ambient.loop=true;
-ambient.volume=.45;
+ambient.loop=true; ambient.volume=.4;
 
-const cuts=[
-  {sx:"50%",sy:"-140%",ex:"50%",ey:"140%"},
-  {sx:"120%",sy:"-40%",ex:"-40%",ey:"140%"},
-  {sx:"-40%",sy:"-40%",ex:"120%",ey:"140%"},
-  {sx:"50%",sy:"140%",ex:"50%",ey:"-140%"}
-];
+/* Glitch typing */
+const text="Place Your Finger";
+let t=0;
+setInterval(()=>{
+  glitchText.textContent=text.slice(0,t++);
+  if(t>text.length) t=0;
+},140);
 
-function startHold(){
-  if(!started){
-    started=true;
-    video.play().catch(()=>{});
-    setTimeout(()=>{
-      ambient.play().catch(()=>{});
-      unsheath.play().catch(()=>{});
-    },300);
-  }
-  hold=setTimeout(cut,2000);
+/* Scan */
+function startScan(){
+  if(scanning) return;
+  scanning=true;
+  let p=0;
+  navigator.vibrate?.([50,30,50]);
+
+  const int=setInterval(()=>{
+    p+=2;
+    bar.style.width=p+"%";
+    if(p>=100){
+      clearInterval(int);
+      unlock();
+    }
+  },40);
 }
 
-function stopHold(){clearTimeout(hold)}
+function unlock(){
+  if("sword69"!== "sword69") return;
+  video.play();
+  ambient.play();
+  unsheath.play();
+  next();
+}
 
+function next(){
+  pages[i].classList.add("hidden");
+  i++;
+  pages[i].classList.remove("hidden");
+}
+
+/* Sword cuts */
 function cut(){
-  if(index>=pages.length-1) return;
-
-  const c=cuts[index] || cuts[0];
-  document.body.classList.add("shake");
-  flash.style.opacity=.7;
+  const angles=[
+    ["50%","-140%","50%","140%"],
+    ["120%","-40%","-40%","140%"],
+    ["-40%","-40%","120%","140%"]
+  ];
+  const a=angles[i%3];
 
   sword.style.opacity=1;
-  sword.style.left=c.sx;
-  sword.style.top=c.sy;
+  sword.style.left=a[0];
+  sword.style.top=a[1];
+  flash.style.opacity=.7;
 
-  slash.currentTime=0;
-  rock.currentTime=0;
   slash.play(); rock.play();
 
   sword.animate(
-    [{left:c.sx,top:c.sy},{left:c.ex,top:c.ey}],
-    {duration:650,easing:"ease-in"}
+    [{left:a[0],top:a[1]},{left:a[2],top:a[3]}],
+    {duration:600}
   );
 
   setTimeout(()=>{
-    pages[index].classList.add("hidden");
-    index++;
-    pages[index].classList.remove("hidden");
     sword.style.opacity=0;
     flash.style.opacity=0;
-    document.body.classList.remove("shake");
-  },650);
+    next();
+  },600);
 }
-
-finger.addEventListener("touchstart",startHold);
-finger.addEventListener("touchend",stopHold);
-finger.addEventListener("mousedown",startHold);
-finger.addEventListener("mouseup",stopHold);
 </script>
 
 </body>
-</html>
+  </html>

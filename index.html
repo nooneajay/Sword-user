@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ajay | Red System</title>
 
+<!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@300..900&family=Rubik+Glitch&display=swap" rel="stylesheet">
@@ -20,6 +21,7 @@ body{
   font-family:"Science Gothic",sans-serif;
 }
 
+/* VIDEO */
 video{
   position:fixed;
   inset:0;
@@ -29,6 +31,7 @@ video{
   z-index:-10;
 }
 
+/* OVERLAY */
 .overlay{
   position:fixed;
   inset:0;
@@ -36,6 +39,7 @@ video{
   z-index:-9;
 }
 
+/* PAGE */
 .page{
   position:absolute;
   inset:0;
@@ -48,18 +52,18 @@ video{
 }
 .hidden{display:none}
 
+/* TEXT */
 .title{
   font-size:36px;
   text-shadow:0 0 30px red;
 }
 .sub{opacity:.85}
-
 .glitch{
   font-family:"Rubik Glitch",cursive;
   letter-spacing:3px;
 }
 
-/* Fingerprint */
+/* FINGERPRINT */
 .fingerprint{
   width:130px;
   height:130px;
@@ -67,7 +71,6 @@ video{
   border:2px solid red;
   box-shadow:0 0 30px red inset,0 0 40px red;
   position:relative;
-  cursor:pointer;
 }
 .scan{
   position:absolute;
@@ -79,7 +82,7 @@ video{
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Progress */
+/* PROGRESS */
 .progress{
   width:220px;
   height:6px;
@@ -92,7 +95,7 @@ video{
   box-shadow:0 0 15px red;
 }
 
-/* Sword */
+/* SWORD */
 .sword{
   position:fixed;
   width:28px;
@@ -103,6 +106,7 @@ video{
   opacity:0;
 }
 
+/* FLASH */
 .flash{
   position:fixed;
   inset:0;
@@ -111,7 +115,7 @@ video{
   z-index:998;
 }
 
-/* Profile */
+/* PROFILE */
 .profile{
   display:flex;
   align-items:center;
@@ -125,6 +129,7 @@ video{
   box-shadow:0 0 30px red;
 }
 
+/* LINKS */
 .links a{
   display:block;
   margin:10px 0;
@@ -132,6 +137,7 @@ video{
   border:1px solid red;
   color:red;
   text-decoration:none;
+  box-shadow:0 0 20px rgba(255,0,0,.4);
 }
 </style>
 </head>
@@ -148,28 +154,31 @@ video{
   <div class="title glitch" id="glitchText"></div>
   <div class="sub">Biometric Authentication</div>
 
-  <div class="fingerprint" onclick="startScan()">
+  <div class="fingerprint" id="finger">
     <div class="scan"></div>
   </div>
 
   <div class="progress"><div class="bar" id="bar"></div></div>
-  <div class="sub" id="err"></div>
 </div>
 
+<!-- PAGE 1 -->
 <div class="page hidden" id="p1">
   <div class="title">Vital Scan</div>
-  <div class="sub">System Online</div>
+  <div class="sub">Tracking Heart Rate</div>
   <button onclick="cut()">Continue</button>
 </div>
 
+<!-- PAGE 2 -->
 <div class="page hidden" id="p2">
   <div class="title">Neural Core</div>
-  <div class="sub">Mind Synced</div>
+  <div class="sub">Reading Your Mind</div>
   <button onclick="cut()">Continue</button>
 </div>
 
+<!-- PAGE 3 -->
 <div class="page hidden" id="p3">
   <div class="title">Access Granted</div>
+
   <div class="profile">
     <img src="images/profile.jpg">
     <div>
@@ -183,24 +192,31 @@ video{
     <a href="https://youtube.com/@infinitypowerverse" target="_blank">YouTube</a>
     <a href="https://t.me/no1narutouzumaki" target="_blank">Telegram</a>
   </div>
+
+  <div class="sub">Made by Ajay</div>
 </div>
 
 <script>
+/* PAGES */
 const pages=[p0,p1,p2,p3];
-let i=0, scanning=false;
+let index=0;
 
-const video=bgVideo;
+/* ELEMENTS */
+const finger=document.getElementById("finger");
+const bar=document.getElementById("bar");
 const sword=document.getElementById("sword");
 const flash=document.getElementById("flash");
-const bar=document.getElementById("bar");
+const video=document.getElementById("bgVideo");
 
+/* AUDIO */
 const ambient=new Audio("sounds/ambient.mp3");
 const slash=new Audio("sounds/sword-slash.mp3");
 const unsheath=new Audio("sounds/sword-unsheath.mp3");
 const rock=new Audio("sounds/rock-break.mp3");
-ambient.loop=true; ambient.volume=.4;
+ambient.loop=true;
+ambient.volume=.4;
 
-/* Glitch typing */
+/* GLITCH TEXT */
 const text="Place Your Finger";
 let t=0;
 setInterval(()=>{
@@ -208,45 +224,64 @@ setInterval(()=>{
   if(t>text.length) t=0;
 },140);
 
-/* Scan */
-function startScan(){
+/* HOLD SCAN */
+let scanning=false,progress=0,progressTimer;
+
+function startHold(){
   if(scanning) return;
   scanning=true;
-  let p=0;
-  navigator.vibrate?.([50,30,50]);
+  progress=0;
+  bar.style.width="0%";
+  navigator.vibrate?.(40);
 
-  const int=setInterval(()=>{
-    p+=2;
-    bar.style.width=p+"%";
-    if(p>=100){
-      clearInterval(int);
+  progressTimer=setInterval(()=>{
+    progress+=2;
+    bar.style.width=progress+"%";
+    if(progress>=100){
+      clearInterval(progressTimer);
       unlock();
     }
   },40);
 }
 
+function stopHold(){
+  if(progress<100){
+    clearInterval(progressTimer);
+    scanning=false;
+    progress=0;
+    bar.style.width="0%";
+  }
+}
+
+/* EVENTS */
+finger.addEventListener("touchstart",startHold);
+finger.addEventListener("touchend",stopHold);
+finger.addEventListener("mousedown",startHold);
+finger.addEventListener("mouseup",stopHold);
+
+/* UNLOCK */
 function unlock(){
-  if("sword69"!== "sword69") return;
-  video.play();
-  ambient.play();
+  video.play().catch(()=>{});
+  ambient.play().catch(()=>{});
   unsheath.play();
   next();
 }
 
+/* PAGE CHANGE */
 function next(){
-  pages[i].classList.add("hidden");
-  i++;
-  pages[i].classList.remove("hidden");
+  pages[index].classList.add("hidden");
+  index++;
+  pages[index].classList.remove("hidden");
 }
 
-/* Sword cuts */
+/* SWORD CUT (DIFFERENT ANGLES) */
 function cut(){
   const angles=[
-    ["50%","-140%","50%","140%"],
-    ["120%","-40%","-40%","140%"],
-    ["-40%","-40%","120%","140%"]
+    ["50%","-140%","50%","140%"],          // vertical
+    ["120%","-40%","-40%","140%"],         // right → left
+    ["-40%","-40%","120%","140%"]          // left → right
   ];
-  const a=angles[i%3];
+  const a=angles[index%3];
 
   sword.style.opacity=1;
   sword.style.left=a[0];
@@ -269,4 +304,4 @@ function cut(){
 </script>
 
 </body>
-  </html>
+</html>

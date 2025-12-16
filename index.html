@@ -47,8 +47,8 @@ video{
   font-family:"Rubik Glitch",cursive;
   font-size:12px;
   letter-spacing:3px;
-  text-transform:uppercase;
   text-shadow:0 0 14px red;
+  animation:flicker 3s infinite;
 }
 
 /* PAGE */
@@ -74,13 +74,31 @@ video{
   letter-spacing:3px;
 }
 
+/* TITLES */
 .title{
   font-size:36px;
   text-shadow:0 0 30px red;
+  animation:glow 2.5s infinite alternate;
 }
 .title::first-letter{font-size:1.3em}
 
-.sub{font-size:14px;opacity:.8}
+.sub{
+  font-size:14px;
+  opacity:.85;
+}
+
+/* DOTS */
+.dots::after{
+  content:"";
+  animation:dots 1.4s steps(4,end) infinite;
+}
+@keyframes dots{
+  0%{content:""}
+  25%{content:"."}
+  50%{content:".."}
+  75%{content:"..."}
+  100%{content:""}
+}
 
 /* FINGER */
 .fingerprint{
@@ -88,6 +106,7 @@ video{
   border-radius:50%;
   border:2px solid red;
   box-shadow:0 0 30px red inset,0 0 40px red;
+  animation:pulse 1.8s infinite;
 }
 
 /* PASSWORD */
@@ -95,10 +114,11 @@ input{
   background:black;
   border:1px solid red;
   color:red;
-  padding:10px;
+  padding:12px;
   text-align:center;
-  letter-spacing:2px;
+  letter-spacing:3px;
   box-shadow:0 0 20px red;
+  outline:none;
 }
 
 /* LINKS */
@@ -110,6 +130,11 @@ input{
   text-decoration:none;
   color:red;
   box-shadow:0 0 25px red;
+  transition:.3s;
+}
+.links a:hover{
+  background:red;
+  color:black;
 }
 
 /* PROFILE */
@@ -129,13 +154,27 @@ input{
 .sword{
   position:fixed;
   width:12px;
-  height:200%;
-  background:linear-gradient(90deg,#555,#fff,#aaa);
-  box-shadow:0 0 80px red;
-  left:50%;
-  top:-150%;
+  height:240%;
+  background:linear-gradient(90deg,#444,#fff,#aaa,#555);
+  box-shadow:0 0 100px red;
   opacity:0;
   z-index:999;
+}
+
+/* ANIMATIONS */
+@keyframes pulse{
+  0%{box-shadow:0 0 10px red inset}
+  50%{box-shadow:0 0 40px red inset}
+  100%{box-shadow:0 0 10px red inset}
+}
+@keyframes glow{
+  from{text-shadow:0 0 20px red}
+  to{text-shadow:0 0 45px red}
+}
+@keyframes flicker{
+  0%,100%{opacity:1}
+  92%{opacity:.8}
+  95%{opacity:.4}
 }
 </style>
 </head>
@@ -150,29 +189,29 @@ input{
 <!-- PAGE 1 -->
 <div class="page">
   <div class="system-tag">Biometric Scan</div>
-  <div class="title">Place Finger</div>
-  <div class="sub">Tap or hold to continue</div>
+  <div class="title">Place Finger<span class="dots"></span></div>
+  <div class="sub">Initializing Sensor<span class="dots"></span></div>
   <div class="fingerprint"></div>
 </div>
 
-<!-- PAGE 2 (PASSWORD) -->
+<!-- PAGE 2 -->
 <div class="page hidden">
   <div class="system-tag">Security Check</div>
-  <div class="title">Enter Password</div>
-  <input id="password" type="password" placeholder="•••••••">
-  <div class="sub">Password required</div>
+  <div class="title">Enter Password<span class="dots"></span></div>
+  <input id="password" type="password" placeholder="••••••">
 </div>
 
 <!-- PAGE 3 -->
 <div class="page hidden">
-  <div class="system-tag">Neural Scan</div>
-  <div class="title">Mind Verified</div>
+  <div class="system-tag">Neural Core</div>
+  <div class="title">Reading Mind<span class="dots"></span></div>
+  <div class="sub">Brainwave Locked<span class="dots"></span></div>
 </div>
 
 <!-- PAGE 4 -->
 <div class="page hidden">
-  <div class="system-tag">System Core</div>
-  <div class="title">Access Loading</div>
+  <div class="system-tag">Cognitive Matrix</div>
+  <div class="title">Measuring Thoughts<span class="dots"></span></div>
 </div>
 
 <!-- PAGE 5 -->
@@ -180,7 +219,7 @@ input{
   <div class="system-tag">Access Granted</div>
 
   <div class="profile">
-    <img src="images/profile.jpg">
+    <img src="images/profile.jpg" alt="Ajay">
     <div>
       <div class="title">Ajay</div>
       <div class="sub">I Love Fresh Air 💫✨</div>
@@ -192,10 +231,12 @@ input{
     <a href="https://youtube.com/@infinitypowerverse" target="_blank">YouTube</a>
     <a href="https://t.me/no1narutouzumaki" target="_blank">Telegram</a>
   </div>
+
+  <div class="sub">System Online<span class="dots"></span></div>
 </div>
 
 <script>
-const pages=document.querySelectorAll(".page");
+const pages=[...document.querySelectorAll(".page")];
 const sword=document.getElementById("sword");
 const video=document.getElementById("bgVideo");
 
@@ -207,43 +248,65 @@ ambient.loop=true;
 ambient.volume=0.4;
 
 let index=0;
-let unlocked=false;
+let started=false;
 
-function playMedia(){
+function startMedia(){
+  if(started) return;
+  started=true;
   video.play().catch(()=>{});
   ambient.play().catch(()=>{});
 }
 
-function cutNext(){
-  if(index===1 && !unlocked) return;
-
-  if(index>=pages.length-1) return;
-
+function swordCut(){
   sword.style.opacity=1;
-  sword.style.top="-150%";
-  sword.animate([{top:"-150%"},{top:"150%"}],{duration:500});
+  let anim;
+
+  if(index===0){
+    sword.style.left="50%";
+    anim=sword.animate([{top:"-150%"},{top:"150%"}],{duration:520});
+  }
+  else if(index===1){
+    anim=sword.animate(
+      [{top:"-120%",left:"80%"},{top:"120%",left:"20%"}],
+      {duration:560}
+    );
+  }
+  else if(index===2){
+    anim=sword.animate(
+      [{top:"-120%",left:"20%"},{top:"120%",left:"80%"}],
+      {duration:560}
+    );
+  }
+  else{
+    sword.style.top="50%";
+    anim=sword.animate(
+      [{left:"-120%"},{left:"120%"}],
+      {duration:520}
+    );
+  }
 
   slash.play();
 
-  setTimeout(()=>{
+  anim.onfinish=()=>{
+    sword.style.opacity=0;
     pages[index].classList.add("hidden");
     index++;
     pages[index].classList.remove("hidden");
-    sword.style.opacity=0;
-  },500);
+  };
 }
 
+/* CLICK TO CONTINUE */
 document.body.addEventListener("click",()=>{
-  playMedia();
-  if(index!==1) cutNext();
+  startMedia();
+  if(index!==1) swordCut();
 });
 
+/* PASSWORD */
 document.getElementById("password").addEventListener("keydown",e=>{
   if(e.key==="Enter"){
     if(e.target.value==="sword69"){
-      unlocked=true;
       unsheath.play();
-      cutNext();
+      swordCut();
     }else{
       alert("ACCESS DENIED");
     }
@@ -252,4 +315,4 @@ document.getElementById("password").addEventListener("keydown",e=>{
 </script>
 
 </body>
-  </html>
+    </html>

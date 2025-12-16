@@ -1,49 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sword Intro</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajay | System Access</title>
+
+<!-- GOOGLE FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&family=Rubik+Glitch&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  background:black;
+  color:#ff1a1a;
+  font-family:"Science Gothic",sans-serif;
+}
+
+/* VIDEO BACKGROUND */
+.video-bg{
+  position:fixed;
+  inset:0;
+  z-index:-5;
+}
+.video-bg video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* RED CINEMATIC OVERLAY */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at center, rgba(140,0,0,.25), rgba(0,0,0,.9));
+  z-index:-4;
+}
+
+/* TOP HUD */
+.hud{
+  position:fixed;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:"Rubik Glitch",cursive;
+  font-size:12px;
+  letter-spacing:2px;
+  opacity:.75;
+  text-shadow:0 0 12px red;
+  z-index:10;
+}
+
+/* PAGE SYSTEM */
+.page{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  text-align:center;
+  transition:.35s;
+}
+.hidden{opacity:0;pointer-events:none}
+
+/* TITLES */
+.title{
+  font-size:42px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  text-shadow:
+    0 0 10px red,
+    0 0 22px rgba(255,0,0,.8),
+    0 0 40px rgba(255,0,0,.6);
+}
+
+.sub{
+  font-size:14px;
+  letter-spacing:3px;
+  opacity:.85;
+}
+
+.glitch{
+  font-family:"Rubik Glitch",cursive;
+  font-size:13px;
+  opacity:.75;
+}
+
+/* LINKS */
+.links a{
+  color:#ff2a2a;
+  text-decoration:none;
+  letter-spacing:2px;
+  margin:10px 0;
+  display:block;
+  transition:.25s;
+}
+.links a:hover{
+  transform:scale(1.1);
+  text-shadow:0 0 20px red;
+}
+
+/* SWORD */
+.sword{
+  position:absolute;
+  width:6px;
+  height:170%;
+  background:linear-gradient(#fff,#888);
+  box-shadow:0 0 40px red;
+  opacity:0;
+  z-index:20;
+}
+
+/* FLASH CUT */
+.flash{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(
+    90deg,
+    transparent 48%,
+    #ff0000 50%,
+    transparent 52%
+  );
+  opacity:0;
+  z-index:15;
+}
+
+/* CUT ANIMATIONS */
+.cut-vertical{
+  animation:cutDown .65s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes cutDown{
+  from{top:-140%;left:50%;opacity:1}
+  to{top:140%;left:50%}
+}
+
+.cut-diagonal{
+  animation:cutDiag .7s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes cutDiag{
+  from{top:-140%;left:20%;opacity:1;transform:rotate(25deg)}
+  to{top:140%;left:80%;transform:rotate(25deg)}
+}
+
+/* SCREEN SHAKE */
+.shake{animation:shake .35s}
+@keyframes shake{
+  0%{transform:translate(0)}
+  25%{transform:translate(-6px,4px)}
+  50%{transform:translate(6px,-4px)}
+  75%{transform:translate(-4px,3px)}
+  100%{transform:translate(0)}
+}
+</style>
 </head>
+
 <body>
 
-  <!-- AMBIENT MUSIC -->
-  <audio id="ambient" loop preload="auto">
-    <source src="sounds/ambient.mp3" type="audio/mpeg" />
-  </audio>
+<!-- VIDEO -->
+<div class="video-bg">
+  <video src="video/bg.mp4" autoplay muted loop playsinline></video>
+</div>
+<div class="overlay"></div>
 
-  <!-- SWORD SOUNDS -->
-  <audio id="slash" src="sounds/sword-slash.mp3"></audio>
+<!-- HUD -->
+<div class="hud">SYSTEM ONLINE • RED PROTOCOL ACTIVE</div>
 
-  <!-- PAGE 1 -->
-  <section class="page active" id="page1">
-    <h1 class="red-glow red-pulse red-flicker">PUT YOUR FINGER HERE</h1>
-    <div id="holdCircle"></div>
-  </section>
+<div class="flash" id="flash"></div>
 
-  <!-- PAGE 2 -->
-  <section class="page" id="page2">
-    <h2 class="red-glow red-pulse">Tracking your heart rate</h2>
-    <h2 class="red-glow red-pulse">Reading your mind</h2>
-    <h2 class="red-glow red-pulse">Measuring your thoughts</h2>
-  </section>
+<!-- PAGES -->
+<div class="page">
+  <div class="glitch">BIOMETRIC INTERFACE</div>
+  <div class="title">Place Your Finger</div>
+  <div class="sub">Hold to initiate scan</div>
+</div>
 
-  <!-- PAGE 3 -->
-  <section class="page" id="page3">
-    <h1 class="red-glow red-pulse">Ajay</h1>
-    <p class="red-glow">Creative Developer • Cinematic Web</p>
-    <div class="links">
-      <a href="#" class="red-glow">Instagram</a>
-      <a href="#" class="red-glow">YouTube</a>
-      <a href="#" class="red-glow">GitHub</a>
-    </div>
-    <footer class="red-glow">Made by Ajay</footer>
-  </section>
+<div class="page hidden">
+  <div class="glitch">VITAL ANALYSIS</div>
+  <div class="title">Tracking Heart Rate</div>
+  <div class="sub">Pulse stability confirmed</div>
+</div>
 
-  <!-- SWORD -->
-  <img src="images/sword.png" id="sword" />
+<div class="page hidden">
+  <div class="glitch">NEURAL CORE</div>
+  <div class="title">Reading Your Mind</div>
+  <div class="sub">Neural pathways synced</div>
+</div>
 
-  <script src="main.js"></script>
+<div class="page hidden">
+  <div class="glitch">COGNITIVE MATRIX</div>
+  <div class="title">Measuring Thoughts</div>
+  <div class="sub">Intent verified</div>
+</div>
+
+<div class="page hidden">
+  <div class="glitch">ACCESS GRANTED</div>
+  <div class="title">Ajay</div>
+  <div class="links">
+    <a href="https://www.instagram.com/kotl_immortal_ajay" target="_blank">Instagram</a>
+    <a href="https://youtube.com/@infinitypowerverse" target="_blank">YouTube</a>
+    <a href="https://t.me/no1narutouzumaki" target="_blank">Telegram</a>
+  </div>
+  <div class="sub">Made by Ajay</div>
+</div>
+
+<div class="sword" id="sword"></div>
+
+<script>
+const pages=[...document.querySelectorAll(".page")];
+const sword=document.getElementById("sword");
+const flash=document.getElementById("flash");
+let i=0,hold;
+
+/* SOUNDS */
+const ambient=new Audio("sounds/ambient.mp3");
+const slash=new Audio("sounds/sword-slash.mp3");
+const unsheath=new Audio("sounds/sword-unsheath.mp3");
+const rock=new Audio("sounds/rock-break.mp3");
+ambient.loop=true; ambient.volume=.45;
+
+function startHold(){
+  if(i===0){
+    ambient.play().catch(()=>{});
+    unsheath.play();
+  }
+  hold=setTimeout(cut,2300);
+}
+function stopHold(){clearTimeout(hold)}
+
+function cut(){
+  if(i>=pages.length-1)return;
+
+  document.body.classList.add("shake");
+  flash.style.opacity=.7;
+  slash.play(); rock.play();
+
+  sword.style.opacity=1;
+  sword.className="sword "+(i%2===0?"cut-vertical":"cut-diagonal");
+
+  setTimeout(()=>{
+    pages[i].classList.add("hidden");
+    i++;
+    pages[i].classList.remove("hidden");
+    sword.className="sword";
+    sword.style.opacity=0;
+    flash.style.opacity=0;
+    document.body.classList.remove("shake");
+  },700);
+}
+
+/* INPUT */
+document.body.addEventListener("touchstart",startHold);
+document.body.addEventListener("touchend",stopHold);
+document.body.addEventListener("mousedown",startHold);
+document.body.addEventListener("mouseup",stopHold);
+</script>
+
 </body>
-</html>
+  </html>

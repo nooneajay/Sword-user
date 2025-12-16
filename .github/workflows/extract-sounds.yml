@@ -1,0 +1,45 @@
+name: Extract sounds.zip and open PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: "Commit message for extracted sounds"
+        required: false
+        default: "Add extracted sounds"
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify sounds.zip exists
+        run: |
+          if [ ! -f sounds.zip ]; then
+            echo "sounds.zip not found in repo root"
+            exit 1
+          fi
+
+      - name: Extract sounds.zip
+        run: |
+          unzip -o sounds.zip -d sounds
+
+      - name: Create branch and commit extracted files
+        run: |
+          BRANCH="extracted-sounds-${{ github.run_id }}"
+          git checkout -b "$BRANCH"
+          git add sounds
+          git commit -m "${{ github.event.inputs.commit_message }}"
+          git push origin "$BRANCH"
+          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+
+      - name: Open Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: ${{ env.BRANCH }}
+          base: main
+          title: "Extract sounds.zip"
+          body: "This PR adds extracted sound files from sounds.zip"
